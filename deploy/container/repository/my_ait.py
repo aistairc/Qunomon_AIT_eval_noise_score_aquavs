@@ -442,7 +442,7 @@ def get_train_lvl(encoder, input_x, input_y, MAD_Outlier_constant):
 
 ### main functions
 @log(logger)
-@downloads(ait_output, path_helper, 'vae', model_name)
+@downloads(ait_output, path_helper, 'vae', 'vae_model_learned.keras')
 def optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, file_path = None):
     img_dimensions, num_classes, num_channels = specify_dimensions(datasetName)
     
