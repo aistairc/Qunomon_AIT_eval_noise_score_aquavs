@@ -1,0 +1,167 @@
+{
+  "name": "eval_noise_score_aquavs",
+  "description": "モデルの安定性を評価するために、ノイズを付けたラベルで検証します。このAITは、SVAE（スティッキング変分オートエンコーダー）の潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。「機械学習品質マネジメントガイドライン第三版」の5番目と6番目の項目、モデルの精度と安定性について従っています。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)",
+  "source_repository": "https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs",
+  "version": "1.0",
+  "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/A-1問題領域分析の十分性",
+  "keywords": [
+    "Evaluation"
+  ],
+  "references": [],
+  "licenses": [],
+  "inventories": [
+    {
+      "name": "mnist_data",
+      "type": "dataset",
+      "description": "mnist data",
+      "requirement": {
+        "format": [
+          "npz"
+        ]
+      }
+    },
+    {
+      "name": "fashion_mnist_data",
+      "type": "dataset",
+      "description": "fashion mnist data",
+      "requirement": {
+        "format": [
+          "npz"
+        ]
+      }
+    },
+    {
+      "name": "cifar10_data",
+      "type": "dataset",
+      "description": "cifar10 data",
+      "requirement": {
+        "format": [
+          "npz"
+        ]
+      }
+    },
+    {
+      "name": "cifar100_data",
+      "type": "dataset",
+      "description": "cifar100 data",
+      "requirement": {
+        "format": [
+          "npz"
+        ]
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "MAD_Outlier_constant",
+      "type": "float",
+      "description": "Hyperparameter specifying the outlier detection in latent space",
+      "default_val": "1.5"
+    },
+    {
+      "name": "MISLABEL_THRESHOLD",
+      "type": "float",
+      "description": "Hyperparameter specifying the mislabel based on fraction of outlier dimensions",
+      "default_val": "0.5"
+    },
+    {
+      "name": "latent_dim",
+      "type": "int",
+      "description": "Hyperparameter specifying the latent space dimension",
+      "default_val": "100"
+    },
+    {
+      "name": "batch_size",
+      "type": "int",
+      "description": "Hyperparameter specifying the batch size of the optimizer of VAE",
+      "default_val": "32"
+    },
+    {
+      "name": "datasetName",
+      "type": "str",
+      "description": "Parameter specifying dataset",
+      "default_val": "mnist"
+    },
+    {
+      "name": "noise_perc",
+      "type": "float",
+      "description": "Parameter specifying the percentage of noised labels",
+      "default_val": "20"
+    },
+    {
+      "name": "noise_systematic",
+      "type": "str",
+      "description": "Parameter specifying the type to add noise according to the label values (Sys) or random (Uni)",
+      "default_val": "Sys"
+    },
+    {
+      "name": "model_name",
+      "type": "str",
+      "description": "Parameter specifying VAE model",
+      "default_val": ""
+    }
+  ],
+  "report": {
+    "measures": [
+      {
+        "name": "evaluation_result_accuracy",
+        "type": "float",
+        "description": "accuracy",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      },
+      {
+        "name": "evaluation_result_precision",
+        "type": "float",
+        "description": "precision",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      },
+      {
+        "name": "evaluation_result_recall",
+        "type": "float",
+        "description": "recall",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      },
+      {
+        "name": "evaluation_result_f1",
+        "type": "float",
+        "description": "f1",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      },
+      {
+        "name": "evaluation_result_roc_auc",
+        "type": "float",
+        "description": "roc_auc",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      },
+      {
+        "name": "evaluation_result_mcc",
+        "type": "float",
+        "description": "mcc",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      }
+    ],
+    "resources": []
+  },
+  "downloads": [
+    {
+      "name": "vae",
+      "description": "VAE model learned"
+    },
+    {
+      "name": "log",
+      "description": "AIT execution logs"
+    }
+  ]
+}
