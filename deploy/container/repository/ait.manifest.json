@@ -1,6 +1,6 @@
 {
   "name": "eval_noise_score_aquavs",
-  "description": "モデルの安定性を評価するために、ノイズを付けたラベルで検証します。このAITは、SVAE（スティッキング変分オートエンコーダー）の潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。「機械学習品質マネジメントガイドライン第三版」の5番目と6番目の項目、モデルの精度と安定性について従っています。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)",
+  "description": "モデルの安定性を評価するために、ノイズを付けたラベルで検証します。SVAEの潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)",
   "source_repository": "https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs",
   "version": "1.0",
   "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/A-1問題領域分析の十分性",

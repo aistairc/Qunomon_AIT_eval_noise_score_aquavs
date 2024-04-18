@@ -170,7 +170,7 @@ if not is_ait_launch:
     from ait_sdk.common.files.ait_manifest_generator import AITManifestGenerator
     manifest_generator = AITManifestGenerator(current_dir)
     manifest_generator.set_ait_name('eval_noise_score_aquavs')
-    manifest_generator.set_ait_description('モデルの安定性を評価するために、ノイズを付けたラベルで検証します。このAITは、SVAE（スティッキング変分オートエンコーダー）の潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。「機械学習品質マネジメントガイドライン第三版」の5番目と6番目の項目、モデルの精度と安定性について従っています。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)')
+    manifest_generator.set_ait_description('モデルの安定性を評価するために、ノイズを付けたラベルで検証します。SVAEの潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)')
 
     manifest_generator.set_ait_source_repository('https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs')
     manifest_generator.set_ait_version('1.0')
