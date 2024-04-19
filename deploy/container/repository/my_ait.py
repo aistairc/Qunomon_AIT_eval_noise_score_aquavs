@@ -173,43 +173,97 @@ if not is_ait_launch:
     manifest_generator.set_ait_description('モデルの安定性を評価するために、ノイズを付けたラベルで検証します。SVAEの潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)')
 
     manifest_generator.set_ait_source_repository('https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs')
+    manifest_generator.add_ait_licenses('Apache License Version 2.0')
     manifest_generator.set_ait_version('1.0')
     manifest_generator.add_ait_keywords('Evaluation')
-    manifest_generator.set_ait_quality('https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/A-1問題領域分析の十分性')
+    manifest_generator.set_ait_quality('https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/C-2機械学習モデルの安定性')
     
-    inventory_requirement_mnist_data         = manifest_generator.format_ait_inventory_requirement(format_=['npz'])
-    inventory_requirement_fashion_mnist_data = manifest_generator.format_ait_inventory_requirement(format_=['npz'])
-    inventory_requirement_cifar10_data       = manifest_generator.format_ait_inventory_requirement(format_=['npz'])
-    inventory_requirement_cifar100_data      = manifest_generator.format_ait_inventory_requirement(format_=['npz'])
+    # inventories
+    inventory_requirement_image_dataset = manifest_generator.format_ait_inventory_requirement(format_=['npz'])
+    manifest_generator.add_ait_inventories(name='image_dataset', 
+                                           type_='dataset', 
+                                           description='画像データセット ※以下の4つのみ利用可能：mnist data, fashion mnist data, cifar10 data, cifar100 data', 
+                                           requirement=inventory_requirement_image_dataset)
 
-    manifest_generator.add_ait_inventories(name='mnist_data', type_='dataset', description='mnist data', requirement=inventory_requirement_mnist_data)
-    manifest_generator.add_ait_inventories(name='fashion_mnist_data', type_='dataset', description='fashion mnist data', requirement=inventory_requirement_fashion_mnist_data)
-    manifest_generator.add_ait_inventories(name='cifar10_data', type_='dataset', description='cifar10 data', requirement=inventory_requirement_cifar10_data)
-    manifest_generator.add_ait_inventories(name='cifar100_data', type_='dataset', description='cifar100 data', requirement=inventory_requirement_cifar100_data)
-
-    ### input parameters, Hyperparameters
-    manifest_generator.add_ait_parameters(name='MAD_Outlier_constant', type_='float', default_val='1.5', description='Hyperparameter specifying the outlier detection in latent space')
-    manifest_generator.add_ait_parameters(name='MISLABEL_THRESHOLD', type_='float', default_val='0.5', description='Hyperparameter specifying the mislabel based on fraction of outlier dimensions')
-    manifest_generator.add_ait_parameters(name='latent_dim', type_='int', default_val='100', description='Hyperparameter specifying the latent space dimension')
-    manifest_generator.add_ait_parameters(name='batch_size', type_='int', default_val='32', description='Hyperparameter specifying the batch size of the optimizer of VAE')
+    # input parameters, Hyperparameters
+    manifest_generator.add_ait_parameters(name='MAD_Outlier_constant', 
+                                          type_='float', 
+                                          default_val='1.5', 
+                                          description='潜在空間における外れ値検出を指定するハイパーパラメーター')
+    manifest_generator.add_ait_parameters(name='MISLABEL_THRESHOLD', 
+                                          type_='float', 
+                                          default_val='0.5', 
+                                          description='外れ値次元の割合に基づく誤ラベルを指定するハイパーパラメーター')
+    manifest_generator.add_ait_parameters(name='latent_dim', 
+                                          type_='int', 
+                                          default_val='100', 
+                                          description='潜在空間の次元を指定するハイパーパラメーター')
+    manifest_generator.add_ait_parameters(name='batch_size', 
+                                          type_='int', 
+                                          default_val='32', 
+                                          description='VAEのオプティマイザのバッチサイズを指定するハイパーパラメーター')
     
-    ### input parameters
-    manifest_generator.add_ait_parameters(name='datasetName', type_='str', default_val='mnist', description='Parameter specifying dataset')
-    manifest_generator.add_ait_parameters(name='noise_perc', type_='float', default_val='20', description='Parameter specifying the percentage of noised labels')
-    manifest_generator.add_ait_parameters(name='noise_systematic', type_='str', default_val='Sys', description='Parameter specifying the type to add noise according to the label values (Sys) or random (Uni)')
-    manifest_generator.add_ait_parameters(name='model_name', type_='str', default_val='', description='Parameter specifying VAE model')
+    # input parameters
+    manifest_generator.add_ait_parameters(name='datasetName', 
+                                          type_='str', 
+                                          default_val='mnist', 
+                                          description='データセットを指定するパラメーター ※指定値について以下の4つのみ利用可能：mnist, fashion_mnist, cifar10, cifar100')
+    manifest_generator.add_ait_parameters(name='noise_perc', 
+                                          type_='float', 
+                                          default_val='20', 
+                                          description='ノイズ付きラベルの割合を指定するパラメーター')
+    manifest_generator.add_ait_parameters(name='noise_systematic', 
+                                          type_='str', 
+                                          default_val='Sys', 
+                                          description='ラベル値に基づいてノイズを加えるタイプを指定するパラメーター ※指定値についてSysまたはUni')
+    manifest_generator.add_ait_parameters(name='model_name', 
+                                          type_='str', 
+                                          default_val='', 
+                                          description='VAEモデル名称を指定するパラメーター')
     
-    ### measures: evaluation metrics
-    manifest_generator.add_ait_measures(name='evaluation_result_accuracy', type_='float', structure='single', min='0', max='1', description='accuracy')
-    manifest_generator.add_ait_measures(name='evaluation_result_precision', type_='float', structure='single', min='0', max='1', description='precision')
-    manifest_generator.add_ait_measures(name='evaluation_result_recall', type_='float', structure='single', min='0', max='1', description='recall')
-    manifest_generator.add_ait_measures(name='evaluation_result_f1', type_='float', structure='single', min='0', max='1', description='f1')
-    manifest_generator.add_ait_measures(name='evaluation_result_roc_auc', type_='float', structure='single', min='0', max='1', description='roc_auc')
-    manifest_generator.add_ait_measures(name='evaluation_result_mcc', type_='float', structure='single', min='0', max='1', description='mcc')
+    # measures: evaluation metrics
+    manifest_generator.add_ait_measures(name='evaluation_result_accuracy', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='正確度（精度）')
+    manifest_generator.add_ait_measures(name='evaluation_result_precision', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='適合率')
+    manifest_generator.add_ait_measures(name='evaluation_result_recall', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='再現率')
+    manifest_generator.add_ait_measures(name='evaluation_result_f1', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='F1スコア')
+    manifest_generator.add_ait_measures(name='evaluation_result_roc_auc', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='ROC曲線下面積（AUC）')
+    manifest_generator.add_ait_measures(name='evaluation_result_mcc', 
+                                        type_='float', 
+                                        structure='single', 
+                                        min='0', 
+                                        max='1', 
+                                        description='マシューズ相関係数')
 
-    ### download: VAE model
-    manifest_generator.add_ait_downloads(name='vae', description='VAE model learned')
-    manifest_generator.add_ait_downloads(name='log', description='AIT execution logs')
+    # download: VAE model
+    manifest_generator.add_ait_downloads(name='vae', 
+                                         description='VAE model learned')
+    manifest_generator.add_ait_downloads(name='log', 
+                                         description='AIT execution logs')
     manifest_path = manifest_generator.write()
 
 
@@ -223,37 +277,18 @@ if not is_ait_launch:
 if not is_ait_launch:
     from ait_sdk.common.files.ait_input_generator import AITInputGenerator
     input_generator = AITInputGenerator(manifest_path)
-    input_generator.add_ait_inventories(name='mnist_data',
+    input_generator.add_ait_inventories(name='image_dataset',
                                         value='mnist_data/mnist_train_data.npz')
-    input_generator.add_ait_inventories(name='fashion_mnist_data',
-                                        value='fashion_mnist_data/fashion_mnist_train_data.npz')
-    input_generator.add_ait_inventories(name='cifar10_data',
-                                        value='cifar10_data/cifar10_train_data.npz')
-    input_generator.add_ait_inventories(name='cifar100_data',
-                                        value='cifar100_data/cifar100_train_data.npz')
-    
-    ### hyperparameter
-    MAD_Outlier_constant = 1.5
-    MISLABEL_THRESHOLD = 0.5
-    latent_dim = 100
-    batch_size = 32
-    
-    input_generator.set_ait_params(name='MAD_Outlier_constant', value=MAD_Outlier_constant)
-    input_generator.set_ait_params(name='MISLABEL_THRESHOLD', value=MISLABEL_THRESHOLD)
-    input_generator.set_ait_params(name='latent_dim', value=latent_dim)
-    input_generator.set_ait_params(name='batch_size', value=batch_size)
-    
-    ### input parameters
-    datasetName = 'mnist'
-    noise_perc = 10
-    noise_systematic = 'Sys'
-    model_name = f'vae_{datasetName}_{noise_systematic}_{noise_perc}.keras'
-    
-    input_generator.set_ait_params(name='datasetName', value=datasetName)
-    input_generator.set_ait_params(name='noise_perc', value=noise_perc)
-    input_generator.set_ait_params(name='noise_systematic', value=noise_systematic)
-    input_generator.set_ait_params(name='model_name', value=model_name)
-        
+
+    input_generator.set_ait_params(name='MAD_Outlier_constant', value=1.5)
+    input_generator.set_ait_params(name='MISLABEL_THRESHOLD', value= 0.5)
+    input_generator.set_ait_params(name='latent_dim', value=100)
+    input_generator.set_ait_params(name='batch_size', value=32)
+    input_generator.set_ait_params(name='datasetName', value='mnist')
+    input_generator.set_ait_params(name='noise_perc', value=10)
+    input_generator.set_ait_params(name='noise_systematic', value='Sys')
+    input_generator.set_ait_params(name='model_name', value='vae_mnist_Sys_10.keras')
+
     input_generator.write()
 
 
@@ -396,7 +431,7 @@ def prepare_data(datasetName, train_data, train_labels, noisePerc, noiseType):
 
     return train_data, noisy_labels, grn_truth, y_enc_noisy_labels
 
-#grouping datapoints by respective classes
+# grouping datapoints by respective classes
 def group_data_by_class(input_x, input_y):
     final_out = defaultdict(list) 
     final_idx = defaultdict(list)
@@ -405,7 +440,7 @@ def group_data_by_class(input_x, input_y):
         final_idx[input_y[i]].append(i)
     return final_out, final_idx
 
-#Ref - https://core.ac.uk/download/pdf/206095228.pdf
+# Ref - https://core.ac.uk/download/pdf/206095228.pdf
 def outlier_detection_med_mad(input_data, k1):
     column_med = np.median(input_data, axis = 0)
     column_mad = stats.median_abs_deviation(input_data,axis = 0)
@@ -443,7 +478,7 @@ def get_train_lvl(encoder, input_x, input_y, MAD_Outlier_constant):
 ### main functions
 @log(logger)
 @downloads(ait_output, path_helper, 'vae', 'vae_model_learned.keras')
-def optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, file_path = None):
+def optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, latent_dim, batch_size, model_name, file_path = None):
     img_dimensions, num_classes, num_channels = specify_dimensions(datasetName)
     
     # VAE 
@@ -516,7 +551,7 @@ def optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, file_path = Non
 
     #Note - VAE trains on noisy data
     vae.fit(train_data[:splitID], [train_data[:splitID], y_enc_noisy_labels[:splitID]], 
-            shuffle=True, epochs=10, batch_size=32, 
+            shuffle=True, epochs=10, batch_size=batch_size, 
             validation_data=(train_data[splitID:], [train_data[splitID:], y_enc_noisy_labels[splitID:]]), 
             callbacks=[lrScheduler, earlyStopCallback],
             verbose=1)
@@ -529,7 +564,7 @@ def optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, file_path = Non
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_accuracy')
-def evaluate_accuracy_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_accuracy_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -542,7 +577,7 @@ def evaluate_accuracy_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_precision')
-def evaluate_precision_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_precision_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -555,7 +590,7 @@ def evaluate_precision_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_recall')
-def evaluate_recall_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_recall_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -568,7 +603,7 @@ def evaluate_recall_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_f1')
-def evaluate_f1_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_f1_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -581,7 +616,7 @@ def evaluate_f1_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_roc_auc')
-def evaluate_roc_auc_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_roc_auc_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -594,7 +629,7 @@ def evaluate_roc_auc_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
 
 @log(logger)
 @measures(ait_output, 'evaluation_result_mcc')
-def evaluate_mcc_AQUAVS(encoder, train_data, noisy_labels, grn_truth):
+def evaluate_mcc_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim):
     
     noisy_lvl = get_train_lvl(encoder, train_data, noisy_labels, MAD_Outlier_constant)
 
@@ -625,19 +660,30 @@ def move_log(file_path: str=None) -> str:
 @log(logger)
 @ait_main(ait_output, path_helper)
 def main() -> None:
+    # inventory
+    input_data = np.load(ait_input.get_inventory_path('image_dataset'))
     
-    input_data = np.load(ait_input.get_inventory_path(f'{datasetName}_data'))
+    # parameters
+    MAD_Outlier_constant = ait_input.get_method_param_value('MAD_Outlier_constant')
+    MISLABEL_THRESHOLD = ait_input.get_method_param_value('MISLABEL_THRESHOLD')
+    latent_dim = ait_input.get_method_param_value('latent_dim')
+    batch_size = ait_input.get_method_param_value('batch_size')
+    datasetName = ait_input.get_method_param_value('datasetName')
+    noise_perc = ait_input.get_method_param_value('noise_perc')
+    noise_systematic = ait_input.get_method_param_value('noise_systematic')
+    model_name = ait_input.get_method_param_value('model_name')
+    
     train_data, noisy_labels, grn_truth, y_enc_noisy_labels = prepare_data(datasetName, input_data['X'], input_data['y'], noise_perc, noise_systematic)
     
-    vae = optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels)
+    vae = optimize_AQUAVS(datasetName, train_data, y_enc_noisy_labels, latent_dim, batch_size, model_name)
     encoder = vae.get_layer('Encoder')
     
-    evaluation_result = evaluate_accuracy_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
-    evaluation_result = evaluate_precision_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
-    evaluation_result = evaluate_recall_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
-    evaluation_result = evaluate_f1_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
-    evaluation_result = evaluate_roc_auc_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
-    evaluation_result = evaluate_mcc_AQUAVS(encoder, train_data, noisy_labels, grn_truth)
+    evaluation_result = evaluate_accuracy_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
+    evaluation_result = evaluate_precision_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
+    evaluation_result = evaluate_recall_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
+    evaluation_result = evaluate_f1_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
+    evaluation_result = evaluate_roc_auc_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
+    evaluation_result = evaluate_mcc_AQUAVS(encoder, train_data, noisy_labels, grn_truth, MAD_Outlier_constant, MISLABEL_THRESHOLD, latent_dim)
     
     move_log()
 

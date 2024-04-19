@@ -3,47 +3,19 @@
   "description": "モデルの安定性を評価するために、ノイズを付けたラベルで検証します。SVAEの潜在表現を使用し、入力データセット内の各サンプルの異常を測定する「ノイズスコア」を計測します。詳細については、元の論文「Pulastya, et al. Assessing the quality of the datasets by identifying mislabeled samples」(URL: https://dl.acm.org/doi/abs/10.1145/3487351.3488361)",
   "source_repository": "https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs",
   "version": "1.0",
-  "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/A-1問題領域分析の十分性",
+  "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/C-2機械学習モデルの安定性",
   "keywords": [
     "Evaluation"
   ],
   "references": [],
-  "licenses": [],
+  "licenses": [
+    "Apache License Version 2.0"
+  ],
   "inventories": [
     {
-      "name": "mnist_data",
+      "name": "image_dataset",
       "type": "dataset",
-      "description": "mnist data",
-      "requirement": {
-        "format": [
-          "npz"
-        ]
-      }
-    },
-    {
-      "name": "fashion_mnist_data",
-      "type": "dataset",
-      "description": "fashion mnist data",
-      "requirement": {
-        "format": [
-          "npz"
-        ]
-      }
-    },
-    {
-      "name": "cifar10_data",
-      "type": "dataset",
-      "description": "cifar10 data",
-      "requirement": {
-        "format": [
-          "npz"
-        ]
-      }
-    },
-    {
-      "name": "cifar100_data",
-      "type": "dataset",
-      "description": "cifar100 data",
+      "description": "画像データセット ※以下の4つのみ利用可能：mnist data, fashion mnist data, cifar10 data, cifar100 data",
       "requirement": {
         "format": [
           "npz"
@@ -55,49 +27,49 @@
     {
       "name": "MAD_Outlier_constant",
       "type": "float",
-      "description": "Hyperparameter specifying the outlier detection in latent space",
+      "description": "潜在空間における外れ値検出を指定するハイパーパラメーター",
       "default_val": "1.5"
     },
     {
       "name": "MISLABEL_THRESHOLD",
       "type": "float",
-      "description": "Hyperparameter specifying the mislabel based on fraction of outlier dimensions",
+      "description": "外れ値次元の割合に基づく誤ラベルを指定するハイパーパラメーター",
       "default_val": "0.5"
     },
     {
       "name": "latent_dim",
       "type": "int",
-      "description": "Hyperparameter specifying the latent space dimension",
+      "description": "潜在空間の次元を指定するハイパーパラメーター",
       "default_val": "100"
     },
     {
       "name": "batch_size",
       "type": "int",
-      "description": "Hyperparameter specifying the batch size of the optimizer of VAE",
+      "description": "VAEのオプティマイザのバッチサイズを指定するハイパーパラメーター",
       "default_val": "32"
     },
     {
       "name": "datasetName",
       "type": "str",
-      "description": "Parameter specifying dataset",
+      "description": "データセットを指定するパラメーター ※指定値について以下の4つのみ利用可能：mnist, fashion_mnist, cifar10, cifar100",
       "default_val": "mnist"
     },
     {
       "name": "noise_perc",
       "type": "float",
-      "description": "Parameter specifying the percentage of noised labels",
+      "description": "ノイズ付きラベルの割合を指定するパラメーター",
       "default_val": "20"
     },
     {
       "name": "noise_systematic",
       "type": "str",
-      "description": "Parameter specifying the type to add noise according to the label values (Sys) or random (Uni)",
+      "description": "ラベル値に基づいてノイズを加えるタイプを指定するパラメーター ※指定値についてSysまたはUni",
       "default_val": "Sys"
     },
     {
       "name": "model_name",
       "type": "str",
-      "description": "Parameter specifying VAE model",
+      "description": "VAEモデル名称を指定するパラメーター",
       "default_val": ""
     }
   ],
@@ -106,7 +78,7 @@
       {
         "name": "evaluation_result_accuracy",
         "type": "float",
-        "description": "accuracy",
+        "description": "正確度（精度）",
         "structure": "single",
         "min": "0",
         "max": "1"
@@ -114,7 +86,7 @@
       {
         "name": "evaluation_result_precision",
         "type": "float",
-        "description": "precision",
+        "description": "適合率",
         "structure": "single",
         "min": "0",
         "max": "1"
@@ -122,7 +94,7 @@
       {
         "name": "evaluation_result_recall",
         "type": "float",
-        "description": "recall",
+        "description": "再現率",
         "structure": "single",
         "min": "0",
         "max": "1"
@@ -130,7 +102,7 @@
       {
         "name": "evaluation_result_f1",
         "type": "float",
-        "description": "f1",
+        "description": "F1スコア",
         "structure": "single",
         "min": "0",
         "max": "1"
@@ -138,7 +110,7 @@
       {
         "name": "evaluation_result_roc_auc",
         "type": "float",
-        "description": "roc_auc",
+        "description": "ROC曲線下面積（AUC）",
         "structure": "single",
         "min": "0",
         "max": "1"
@@ -146,7 +118,7 @@
       {
         "name": "evaluation_result_mcc",
         "type": "float",
-        "description": "mcc",
+        "description": "マシューズ相関係数",
         "structure": "single",
         "min": "0",
         "max": "1"
