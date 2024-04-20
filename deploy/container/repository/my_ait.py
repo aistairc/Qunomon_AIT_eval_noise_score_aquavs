@@ -38,7 +38,7 @@
 
 # [uneditable]
 
-# In[1]:
+# In[ ]:
 
 
 # Determine whether to start AIT or jupyter by startup argument
@@ -261,9 +261,9 @@ if not is_ait_launch:
 
     # download: VAE model
     manifest_generator.add_ait_downloads(name='vae', 
-                                         description='VAE model learned')
-    manifest_generator.add_ait_downloads(name='log', 
-                                         description='AIT execution logs')
+                                         description='トレーニング済みVAEモデル')
+    manifest_generator.add_ait_downloads(name='Log', 
+                                         description='AITの実行ログ')
     manifest_path = manifest_generator.write()
 
 

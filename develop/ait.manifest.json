@@ -129,11 +129,11 @@
   "downloads": [
     {
       "name": "vae",
-      "description": "VAE model learned"
+      "description": "トレーニング済みVAEモデル"
     },
     {
-      "name": "log",
-      "description": "AIT execution logs"
+      "name": "Log",
+      "description": "AITの実行ログ"
     }
   ]
 }
