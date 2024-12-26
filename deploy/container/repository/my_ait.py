@@ -90,11 +90,11 @@ if not is_ait_launch:
 
 if not is_ait_launch:
     requirements_generator.add_package('numpy', '1.26.4')
-    requirements_generator.add_package('matplotlib', '3.7.3')
+    requirements_generator.add_package('matplotlib', '3.9.4')
     requirements_generator.add_package('pandas', '2.2.3')
-    requirements_generator.add_package('scikit-learn', '1.5.2')
+    requirements_generator.add_package('scikit-learn', '1.6.0')
     requirements_generator.add_package('tensorflow', '2.18.0')
-    requirements_generator.add_package('scipy', '1.13.0')
+    requirements_generator.add_package('scipy', '1.13.1')
 
 
 # #### #3-3 [uneditable]
@@ -174,7 +174,7 @@ if not is_ait_launch:
 
     manifest_generator.set_ait_source_repository('https://github.com/aistairc/Qunomon_AIT_eval_noise_score_aquavs')
     manifest_generator.add_ait_licenses('Apache License Version 2.0')
-    manifest_generator.set_ait_version('1.2')
+    manifest_generator.set_ait_version('1.3')
     manifest_generator.add_ait_keywords('Evaluation')
     manifest_generator.set_ait_quality('https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/C-2機械学習モデルの安定性')
     
